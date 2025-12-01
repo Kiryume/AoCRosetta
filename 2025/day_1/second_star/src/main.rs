@@ -12,13 +12,10 @@ fn main() {
                 v.parse::<i32>().unwrap()
             }
         })
-        .fold((0, 50), |(mut p, v), c| {
-            let nc = c % 100;
-            let nv = v + nc;
-            if (nv < 0 && v != 0) || (nv == 0 && c % 100 != 0) || nv >= 100 {
-                p += 1
-            }
-            (p + c.abs() / 100, (v + nc + 100) % 100)
+        .fold((0, 50), |(p, v), c| {
+            let nv = v + (c % 100);
+            let over = nv <= 0 && v != 0 || nv >= 100;
+            (p + (c.abs() / 100) + (over as i32), (nv + 100) % 100)
         })
         .0;
     println!("{}", res);
